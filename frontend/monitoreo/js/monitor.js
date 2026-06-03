@@ -204,7 +204,7 @@ ws.onmessage = (event) =>
     // PARAMETRO
     // ==================================
 
-    if(data.tipo == "parametro")
+    if(data.tipo == "parametro" || data.tipo == "velocidad")
     {
         velocidadActual.innerHTML =
         data.velocidad;

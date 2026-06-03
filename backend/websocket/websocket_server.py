@@ -38,6 +38,17 @@ class WebSocketServer:
                 data = json.loads(
                     message
                 )
+             
+                # ==========================================
+                # DEMOS LIVE
+                # ==========================================
+
+                if data.get("tipo") == "demo":
+
+                    await WebSocketServer.broadcast(
+                        data
+                    )
+
 
                 # ==========================
                 # REGISTRAR ESP
@@ -77,6 +88,8 @@ class WebSocketServer:
             print(
                 "Cliente desconectado"
             )
+
+
 
     # ======================================
     # ENVIAR A TODOS
