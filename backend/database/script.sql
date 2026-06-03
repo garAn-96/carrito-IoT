@@ -108,6 +108,10 @@ CREATE TABLE IF NOT EXISTS demo_movimientos(
     REFERENCES cat_movimientos(id_movimiento)
 );
 
+
+ALTER TABLE demo_movimientos
+ADD COLUMN delay_ms INT DEFAULT 700;
+
 -- ============================================
 -- INSERT MOVIMIENTOS
 -- ============================================
@@ -147,56 +151,159 @@ VALUES
 
 ('velocidad','700');
 
+SELECT * FROM demos;
+
+SET SQL_SAFE_UPDATES = 0;
+
+DELETE FROM demo_movimientos;
+DELETE FROM demos;
+ALTER TABLE demos AUTO_INCREMENT = 1;
+ALTER TABLE demo_movimientos AUTO_INCREMENT = 1;
+
+
 -- ============================================
 -- DEMOS
 -- ============================================
-
-INSERT INTO demos(
-    nombre_demo
-)
+INSERT INTO demos
+(nombre_demo)
 VALUES
+('Demo Espiral'),
+('Demo Patrulla'),
+('Demo Escape');
 
-('Demo Cuadrado'),
-('Demo Zig Zag');
+-- ======================================
+-- DEMO 1
+-- CUADRADO
+-- ======================================
 
--- ============================================
--- DEMO CUADRADO
--- ============================================
+INSERT INTO demo_movimientos
+(
 
-INSERT INTO demo_movimientos(
     id_demo,
+
     id_movimiento,
-    orden_movimiento
+
+    orden_movimiento,
+
+    delay_ms
+
 )
 VALUES
 
-(1,1,1),
-(1,10,2),
+(1,1,1,700),
+(1,10,2,450),
+(1,1,3,700),
+(1,10,4,450),
+(1,1,5,700),
+(1,10,6,450),
+(1,1,7,700),
+(1,10,8,450);
 
-(1,1,3),
-(1,10,4),
+-- ======================================
+-- DEMO 2
+-- ZIGZAG
+-- ======================================
 
-(1,1,5),
-(1,10,6),
+INSERT INTO demo_movimientos
+(
 
-(1,1,7),
-(1,10,8);
-
--- ============================================
--- DEMO ZIG ZAG
--- ============================================
-
-INSERT INTO demo_movimientos(
     id_demo,
+
     id_movimiento,
-    orden_movimiento
+
+    orden_movimiento,
+
+    delay_ms
+
 )
 VALUES
 
-(2,6,1),
-(2,7,2),
-(2,6,3),
-(2,7,4);
+(2,1,1,600),
+(2,6,2,350),
+(2,1,3,600),
+(2,7,4,350),
+(2,1,5,600),
+(2,6,6,350);
+
+-- ======================================
+-- DEMO 3
+-- ESPIRAL
+-- ======================================
+
+INSERT INTO demo_movimientos
+(
+
+    id_demo,
+
+    id_movimiento,
+
+    orden_movimiento,
+
+    delay_ms
+
+)
+VALUES
+
+(3,1,1,400),
+(3,10,2,300),
+(3,1,3,600),
+(3,10,4,300),
+(3,1,5,800);
+
+-- ======================================
+-- DEMO 4
+-- PATRULLA
+-- ======================================
+
+INSERT INTO demo_movimientos
+(
+
+    id_demo,
+
+    id_movimiento,
+
+    orden_movimiento,
+
+    delay_ms
+
+)
+VALUES
+
+(4,1,1,700),
+(4,2,2,700),
+(4,1,3,700),
+(4,2,4,700);
+
+-- ======================================
+-- DEMO 5
+-- ESCAPE
+-- ======================================
+
+INSERT INTO demo_movimientos
+(
+
+    id_demo,
+
+    id_movimiento,
+
+    orden_movimiento,
+
+    delay_ms
+
+)
+VALUES
+
+(5,2,1,500),
+(5,11,2,400),
+(5,1,3,700),
+(5,10,4,400);
+
+
+SELECT
+id_demo,
+nombre_demo
+FROM demos;
+
 
 -- ============================================
 -- SP REGISTRAR MOVIMIENTO

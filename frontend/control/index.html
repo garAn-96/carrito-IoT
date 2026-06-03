@@ -36,29 +36,35 @@ rel="stylesheet">
 <div class="container container-control">
 
     <!-- ============================== -->
-    <!-- TITULO -->
+    <!-- HEADER -->
     <!-- ============================== -->
 
     <div class="glass-card text-center">
 
         <h1>
-            Centro de Control IoT
+            Control Vehículo IoT
         </h1>
 
         <div class="estado-box">
 
-            WebSocket:
+            WS:
+
             <span id="estadoWS">
-                CONECTADO
+
+                DESCONECTADO
+
             </span>
 
         </div>
 
-        <div class="estado-box">
+        <div class="mt-2">
 
             Movimiento:
+
             <span id="movimientoActual">
+
                 stop
+
             </span>
 
         </div>
@@ -66,225 +72,379 @@ rel="stylesheet">
     </div>
 
     <!-- ============================== -->
-    <!-- ALERTA -->
+    <!-- CONTENIDO -->
     <!-- ============================== -->
 
-    <div
-    id="alertaObstaculo"
-    class="alert-obstaculo text-center">
+    <div class="row">
 
-        <i class="bi bi-exclamation-triangle-fill"></i>
+        <!-- ========================== -->
+        <!-- IZQUIERDA -->
+        <!-- ========================== -->
 
-        OBSTÁCULO DETECTADO
+        <div class="col-md-3">
 
-    </div>
+            <!-- VELOCIDAD -->
 
-    <!-- ============================== -->
-   
-<div class="row">
+            <div class="glass-card">
 
-    <!-- ================================= -->
-    <!-- VELOCIDAD -->
-    <!-- ================================= -->
+                <h4>
+                    Velocidad
+                </h4>
 
-    <div class="col-md-3">
+                <input
+                type="range"
 
-        <div class="glass-card h-100">
+                id="sliderVelocidad"
 
-            <h4>
-                Velocidad
-            </h4>
+                min="100"
+                max="700"
+                value="450">
 
-            <input
-            type="range"
-            min="0"
-            max="1023"
-            value="700"
-            id="sliderVelocidad">
+                <div class="mt-2">
 
-            <div class="mt-3">
+                    Valor:
 
-                Valor:
+                    <span
+                    id="valorVelocidad">
 
-                <span id="valorVelocidad">
-                    700
-                </span>
+                        700
+
+                    </span>
+
+                </div>
 
             </div>
 
-        </div>
-
-    </div>
-
-    <!-- ================================= -->
-    <!-- CONTROLES -->
-    <!-- ================================= -->
-
-    <div class="col-md-6">
-
-        <div class="glass-card text-center">
-
-            <h4>
-                Control Movimiento
-            </h4>
+            <!-- ALERTA -->
 
             <div
             id="alertaObstaculo"
-            class="alert-obstaculo mb-3">
-
-                <i class="
-                bi bi-exclamation-triangle-fill
-                "></i>
-
-                Obstáculo Detectado
+            class="
+            alert-obstaculo
+            mb-3
+            ">
 
             </div>
 
-            <!-- FILA 1 -->
+            <!-- EVENTOS -->
 
-            <div class="row mb-2 justify-content-center">
+            <div class="glass-card">
 
-                <div class="col-3">
+                <h4>
+                    Eventos
+                </h4>
 
-                    <button
-                    class="btn-control"
-                    onclick="mover('giro_90_izquierda')">
+                <ul
+                id="listaEventos"
+                class="
+                list-group
+                lista-scroll
+                ">
 
-                        <i class="
-                        bi bi-arrow-counterclockwise
-                        "></i>
+                </ul>
 
-                    </button>
+            </div>
+
+        </div>
+
+        <!-- ========================== -->
+        <!-- CENTRO -->
+        <!-- ========================== -->
+
+        <div class="col-md-6">
+
+            <div class="glass-card text-center">
+
+                <!-- FILA 1 -->
+
+                <div class="
+                row
+                mb-2
+                justify-content-center
+                ">
+
+                    <div class="col-3">
+
+                        <button
+                        class="btn-control"
+
+                        onclick="
+                        mover(
+                        'vuelta_adelante_izquierda'
+                        )">
+
+                            <i class="
+                            bi bi-arrow-up-left
+                            "></i>
+
+                        </button>
+
+                    </div>
+
+                    <div class="col-3">
+
+                        <button
+                        class="btn-control"
+
+                        onclick="
+                        mover(
+                        'adelante'
+                        )">
+
+                            <i class="
+                            bi bi-arrow-up
+                            "></i>
+
+                        </button>
+
+                    </div>
+
+                    <div class="col-3">
+
+                        <button
+                        class="btn-control"
+
+                        onclick="
+                        mover(
+                        'vuelta_adelante_derecha'
+                        )">
+
+                            <i class="
+                            bi bi-arrow-up-right
+                            "></i>
+
+                        </button>
+
+                    </div>
 
                 </div>
 
-                <div class="col-3">
+                <!-- FILA 2 -->
 
-                    <button
-                    class="btn-control"
-                    onclick="mover('adelante')">
+                <div class="
+                row
+                mb-2
+                justify-content-center
+                ">
 
-                        <i class="
-                        bi bi-arrow-up
-                        "></i>
+                    <div class="col-3">
 
-                    </button>
+                        <button
+                        class="btn-control"
+
+                        onclick="
+                        mover(
+                        'izquierda'
+                        )">
+
+                            <i class="
+                            bi bi-arrow-left
+                            "></i>
+
+                        </button>
+
+                    </div>
+
+                    <div class="col-3">
+
+                        <button
+                        class="
+                        btn-control
+                        btn-stop
+                        "
+
+                        onclick="
+                        mover(
+                        'stop'
+                        )">
+
+                            <i class="
+                            bi bi-stop-fill
+                            "></i>
+
+                        </button>
+
+                    </div>
+
+                    <div class="col-3">
+
+                        <button
+                        class="btn-control"
+
+                        onclick="
+                        mover(
+                        'derecha'
+                        )">
+
+                            <i class="
+                            bi bi-arrow-right
+                            "></i>
+
+                        </button>
+
+                    </div>
 
                 </div>
 
-                <div class="col-3">
+                <!-- FILA 3 -->
 
-                    <button
-                    class="btn-control"
-                    onclick="mover('giro_90_derecha')">
+                <div class="
+                row
+                mb-2
+                justify-content-center
+                ">
 
-                        <i class="
-                        bi bi-arrow-clockwise
-                        "></i>
+                    <div class="col-3">
 
-                    </button>
+                        <button
+                        class="btn-control"
+
+                        onclick="
+                        mover(
+                        'vuelta_atras_izquierda'
+                        )">
+
+                            <i class="
+                            bi bi-arrow-down-left
+                            "></i>
+
+                        </button>
+
+                    </div>
+
+                    <div class="col-3">
+
+                        <button
+                        class="btn-control"
+
+                        onclick="
+                        mover(
+                        'atras'
+                        )">
+
+                            <i class="
+                            bi bi-arrow-down
+                            "></i>
+
+                        </button>
+
+                    </div>
+
+                    <div class="col-3">
+
+                        <button
+                        class="btn-control"
+
+                        onclick="
+                        mover(
+                        'vuelta_atras_derecha'
+                        )">
+
+                            <i class="
+                            bi bi-arrow-down-right
+                            "></i>
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+                <!-- FILA 4 -->
+
+                <div class="
+                row
+                justify-content-center
+                ">
+
+                    <div class="col-3">
+
+                        <button
+                        class="btn-control"
+
+                        onclick="
+                        mover(
+                        'giro_360_izquierda'
+                        )">
+
+                            <i class="
+                            bi bi-arrow-counterclockwise
+                            "></i>
+
+                        </button>
+
+                    </div>
+
+                    <div class="col-3">
+
+                        <button
+                        class="btn-control"
+
+                        onclick="
+                        mover(
+                        'giro_90_izquierda'
+                        )">
+
+                            90°
+
+                        </button>
+
+                    </div>
+
+                    <div class="col-3">
+
+                        <button
+                        class="btn-control"
+
+                        onclick="
+                        mover(
+                        'giro_90_derecha'
+                        )">
+
+                            90°
+
+                        </button>
+
+                    </div>
+
+                    <div class="col-3">
+
+                        <button
+                        class="btn-control"
+
+                        onclick="
+                        mover(
+                        'giro_360_derecha'
+                        )">
+
+                            <i class="
+                            bi bi-arrow-clockwise
+                            "></i>
+
+                        </button>
+
+                    </div>
 
                 </div>
 
             </div>
 
-            <!-- FILA 2 -->
+        </div>
 
-            <div class="row mb-2 justify-content-center">
+        <!-- ========================== -->
+        <!-- DERECHA -->
+        <!-- ========================== -->
 
-                <div class="col-3">
+        <div class="col-md-3">
 
-                    <button
-                    class="btn-control"
-                    onclick="mover('izquierda')">
+            <div class="glass-card">
 
-                        <i class="
-                        bi bi-arrow-left
-                        "></i>
+                <h4>
+                    Demos
+                </h4>
 
-                    </button>
-
-                </div>
-
-                <div class="col-3">
-
-                    <button
-                    class="btn-control btn-stop"
-                    onclick="mover('stop')">
-
-                        <i class="
-                        bi bi-stop-fill
-                        "></i>
-
-                    </button>
-
-                </div>
-
-                <div class="col-3">
-
-                    <button
-                    class="btn-control"
-                    onclick="mover('derecha')">
-
-                        <i class="
-                        bi bi-arrow-right
-                        "></i>
-
-                    </button>
-
-                </div>
-
-            </div>
-
-            <!-- FILA 3 -->
-
-            <div class="row mb-2 justify-content-center">
-
-                <div class="col-3">
-
-                    <button
-                    class="btn-control"
-                    onclick="
-                    mover(
-                    'vuelta_atras_izquierda'
-                    )">
-
-                        <i class="
-                        bi bi-arrow-down-left
-                        "></i>
-
-                    </button>
-
-                </div>
-
-                <div class="col-3">
-
-                    <button
-                    class="btn-control"
-                    onclick="mover('atras')">
-
-                        <i class="
-                        bi bi-arrow-down
-                        "></i>
-
-                    </button>
-
-                </div>
-
-                <div class="col-3">
-
-                    <button
-                    class="btn-control"
-                    onclick="
-                    mover(
-                    'vuelta_atras_derecha'
-                    )">
-
-                        <i class="
-                        bi bi-arrow-down-right
-                        "></i>
-
-                    </button>
+                <div
+                id="listaDemos">
 
                 </div>
 
@@ -294,47 +454,13 @@ rel="stylesheet">
 
     </div>
 
-    <!-- ================================= -->
-    <!-- DEMOS -->
-    <!-- ================================= -->
-
-    <div class="col-md-3">
-
-        <div class="glass-card h-100">
-
-            <h4>
-                Demos
-            </h4>
-
-            <div id="listaDemos">
-
-            </div>
-
-        </div>
-
-    </div>
-
-</div>
-
-    <!-- ============================== -->
     <!-- FOOTER -->
-    <!-- ============================== -->
 
     <footer class="footer text-center">
 
-        <p>
-            Sistema IoT para Control y
-            Monitoreo de Carrito Inteligente
-        </p>
-
-        <p>
-            Elaborado por:
-            Karen Garcia Angeles
-        </p>
-
-        <p>
-            Tecnológico Nacional de México - Campus Pachuca
-        </p>
+        Sistema IoT Inteligente |
+        Karen Garcia |
+        TecNM
 
     </footer>
 

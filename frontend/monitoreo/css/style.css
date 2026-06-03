@@ -13,14 +13,20 @@ body{
     'Segoe UI',
     sans-serif;
 
-    overflow:hidden;
+    overflow:auto;
 
     min-height:100vh;
+
+    zoom:.92;
 }
+
+/* ===================================== */
+/* CONTAINER */
+/* ===================================== */
 
 .container-monitor{
 
-    max-width:1500px;
+    max-width:1450px;
 
     padding-top:10px;
 }
@@ -69,6 +75,8 @@ h1{
     font-size:2rem;
 
     font-weight:bold;
+
+    margin-bottom:15px;
 }
 
 h4{
@@ -77,7 +85,9 @@ h4{
 
     font-size:1rem;
 
-    margin-bottom:15px;
+    margin-bottom:12px;
+
+    font-weight:bold;
 }
 
 /* ===================================== */
@@ -122,109 +132,12 @@ h4{
 
     position:relative;
 
-    height:280px;
+    height:150px;
 }
 
 canvas{
 
-    max-height:260px;
-}
-
-/* ===================================== */
-/* CARRITO */
-/* ===================================== */
-
-.carro-visual{
-
-    height:260px;
-
-    display:flex;
-
-    justify-content:center;
-
-    align-items:center;
-
-    position:relative;
-}
-
-.carro{
-
-    width:120px;
-
-    height:180px;
-
-    background:
-    linear-gradient(
-        145deg,
-        #0ea5e9,
-        #2563eb
-    );
-
-    border-radius:20px;
-
-    position:relative;
-
-    box-shadow:
-    0 0 30px rgba(56,189,248,.6);
-
-    transition:.3s;
-}
-
-.carro::before,
-.carro::after{
-
-    content:"";
-
-    width:25px;
-
-    height:50px;
-
-    background:#111827;
-
-    position:absolute;
-
-    border-radius:10px;
-}
-
-.carro::before{
-
-    left:-15px;
-
-    top:20px;
-}
-
-.carro::after{
-
-    right:-15px;
-
-    top:20px;
-}
-
-.mov-arrow{
-
-    position:absolute;
-
-    font-size:3rem;
-
-    color:white;
-
-    animation:
-    moverArrow .8s infinite;
-}
-
-@keyframes moverArrow{
-
-    0%{
-        transform:translateY(0);
-    }
-
-    50%{
-        transform:translateY(-5px);
-    }
-
-    100%{
-        transform:translateY(0);
-    }
+    max-height:180px;
 }
 
 /* ===================================== */
@@ -252,6 +165,10 @@ canvas{
     pulseDanger .8s infinite;
 
     display:none;
+
+    text-align:center;
+
+    margin-bottom:10px;
 }
 
 @keyframes pulseDanger{
@@ -270,12 +187,151 @@ canvas{
 }
 
 /* ===================================== */
+/* VEHICULO */
+/* ===================================== */
+
+.carro-visual{
+
+    height:120px;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    position:relative;
+}
+
+.carro{
+
+    width:120px;
+
+    height:60px;
+
+    background:
+    linear-gradient(
+        145deg,
+        #38bdf8,
+        #2563eb
+    );
+
+    border-radius:20px;
+
+    position:relative;
+
+    box-shadow:
+    0 0 20px rgba(56,189,248,.5);
+
+    transition:.3s;
+}
+
+/* RUEDAS */
+
+.carro::before{
+
+    content:"";
+
+    width:25px;
+
+    height:25px;
+
+    background:#0f172a;
+
+    border:
+    4px solid #475569;
+
+    border-radius:50%;
+
+    position:absolute;
+
+    top:-12px;
+
+    left:12px;
+}
+
+.carro::after{
+
+    content:"";
+
+    width:25px;
+
+    height:25px;
+
+    background:#0f172a;
+
+    border:
+    4px solid #475569;
+
+    border-radius:50%;
+
+    position:absolute;
+
+    top:-12px;
+
+    right:12px;
+}
+
+/* CABINA */
+
+.carro .cabina{
+
+    width:50px;
+
+    height:28px;
+
+    background:#e2e8f0;
+
+    border-radius:10px;
+
+    position:absolute;
+
+    top:15px;
+
+    left:35px;
+}
+
+/* FLECHA */
+
+.mov-arrow{
+
+    position:absolute;
+
+    font-size:2rem;
+
+    color:white;
+
+    top:35px;
+
+    animation:
+    moverArrow .8s infinite;
+}
+
+@keyframes moverArrow{
+
+    0%{
+        transform:
+        translateY(0);
+    }
+
+    50%{
+        transform:
+        translateY(-5px);
+    }
+
+    100%{
+        transform:
+        translateY(0);
+    }
+}
+
+/* ===================================== */
 /* LISTAS */
 /* ===================================== */
 
 .lista-scroll{
 
-    max-height:180px;
+    max-height:140px;
 
     overflow-y:auto;
 }
@@ -295,6 +351,14 @@ canvas{
     border-radius:12px;
 
     font-size:.85rem;
+
+    transition:.2s;
+}
+
+.list-group-item:hover{
+
+    background:
+    rgba(56,189,248,.1);
 }
 
 /* ===================================== */
@@ -313,6 +377,9 @@ canvas{
     margin-bottom:10px;
 
     transition:.3s;
+
+    border:
+    1px solid transparent;
 }
 
 .demo-card.active{
@@ -325,6 +392,27 @@ canvas{
 
     background:
     rgba(56,189,248,.1);
+
+    transform:
+    scale(1.02);
+}
+
+.demo-card h5{
+
+    margin:0;
+
+    font-size:.95rem;
+}
+
+.movimientos-demo{
+
+    margin-top:10px;
+
+    padding-left:20px;
+
+    font-size:.8rem;
+
+    color:#cbd5e1;
 }
 
 .live-badge{
@@ -340,6 +428,35 @@ canvas{
     font-size:.7rem;
 
     margin-left:10px;
+
+    animation:
+    pulseLive .8s infinite;
+}
+
+@keyframes pulseLive{
+
+    0%{
+        opacity:.5;
+    }
+
+    50%{
+        opacity:1;
+    }
+
+    100%{
+        opacity:.5;
+    }
+}
+
+/* ===================================== */
+/* TELEMETRIA */
+/* ===================================== */
+
+.telemetria-icon{
+
+    color:#38bdf8;
+
+    margin-right:5px;
 }
 
 /* ===================================== */
@@ -348,16 +465,18 @@ canvas{
 
 .footer{
 
-    margin-top:5px;
+    margin-top:15px;
 
-    padding:10px;
+    padding:15px;
 
     color:#94a3b8;
 
     border-top:
     1px solid rgba(255,255,255,.1);
 
-    font-size:.8rem;
+    font-size:.75rem;
+
+    text-align:center;
 }
 
 /* ===================================== */
@@ -376,3 +495,29 @@ canvas{
     border-radius:20px;
 }
 
+/* ===================================== */
+/* RESPONSIVE */
+/* ===================================== */
+
+@media(max-width:992px){
+
+    body{
+
+        zoom:1;
+    }
+
+    .container-monitor{
+
+        padding:10px;
+    }
+
+    .carro-visual{
+
+        height:100px;
+    }
+
+    .lista-scroll{
+
+        max-height:120px;
+    }
+}

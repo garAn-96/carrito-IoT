@@ -11,7 +11,7 @@ new WebSocket(
 );
 
 // ======================================
-// ESTADO WS
+// WS STATUS
 // ======================================
 
 ws.onopen = () =>
@@ -31,7 +31,7 @@ ws.onclose = () =>
 };
 
 // ======================================
-// MENSAJES WS
+// WS MESSAGE
 // ======================================
 
 ws.onmessage = (event) =>
@@ -56,6 +56,12 @@ ws.onmessage = (event) =>
             "movimientoActual"
         ).innerHTML =
         data.movimiento;
+
+        agregarEvento(
+
+            "Movimiento: "
+            + data.movimiento
+        );
     }
 
     // ==================================
@@ -67,31 +73,104 @@ ws.onmessage = (event) =>
         "obstaculo"
     )
     {
-        const alerta =
-        document.getElementById(
-            "alertaObstaculo"
+        mostrarAlertaObstaculo(
+            data.distancia
         );
 
-        alerta.style.display =
-        "block";
+        agregarEvento(
 
-        alerta.innerHTML = `
-        
-        <i class="bi bi-exclamation-triangle-fill"></i>
+            "Obstáculo: "
+            + data.distancia
+            + " cm"
+        );
+    }
 
-        OBSTÁCULO DETECTADO
-        (${data.distancia} cm)
+    // ==================================
+    // PARAMETRO
+    // ==================================
 
-        `;
-
-        setTimeout(() => {
-
-            alerta.style.display =
-            "none";
-
-        }, 3000);
+    if(
+        data.tipo ==
+        "parametro"
+    )
+    {
+        document.getElementById(
+            "valorVelocidad"
+        ).innerHTML =
+        data.velocidad;
     }
 };
+
+// ======================================
+// ALERTA
+// ======================================
+
+function mostrarAlertaObstaculo(
+    distancia
+)
+{
+    const alerta =
+    document.getElementById(
+        "alertaObstaculo"
+    );
+
+    alerta.style.display =
+    "block";
+
+    alerta.innerHTML = `
+
+    <i class="
+    bi bi-exclamation-triangle-fill
+    "></i>
+
+    OBSTÁCULO DETECTADO
+
+    (${distancia} cm)
+
+    `;
+
+    setTimeout(() => {
+
+        alerta.style.display =
+        "none";
+
+    }, 3000);
+}
+
+// ======================================
+// EVENTOS
+// ======================================
+
+function agregarEvento(
+    texto
+)
+{
+    const lista =
+    document.getElementById(
+        "listaEventos"
+    );
+
+    lista.innerHTML = `
+
+    <li class="
+    list-group-item
+    ">
+
+        ${texto}
+
+    </li>
+
+    ` + lista.innerHTML;
+
+    while(
+        lista.children.length > 10
+    )
+    {
+        lista.removeChild(
+            lista.lastChild
+        );
+    }
+}
 
 // ======================================
 // MOVER
@@ -163,7 +242,7 @@ sliderVelocidad.addEventListener(
 );
 
 // ======================================
-// CARGAR DEMOS
+// DEMOS
 // ======================================
 
 async function cargarDemos()
@@ -198,7 +277,8 @@ async function cargarDemos()
 
         onclick="
         ejecutarDemo(
-            ${demo.id_demo}
+            ${demo.id_demo},
+            '${demo.nombre_demo}'
         )
         ">
 
@@ -219,24 +299,74 @@ async function cargarDemos()
 // ======================================
 
 async function ejecutarDemo(
-    id_demo
+
+    id_demo,
+    nombre_demo
+
 )
 {
-    try
+    ws.send(
+
+        JSON.stringify({
+
+            tipo:"demo",
+
+            id_demo:id_demo,
+
+            nombre_demo:nombre_demo
+
+        })
+    );
+
+    const response =
+    await fetch(
+
+        `${API}/api/demo/${id_demo}`
+    );
+
+    const movimientos =
+    await response.json();
+
+    for(const mov of movimientos)
     {
         await fetch(
 
-            `${API}/api/ejecutar_demo/${id_demo}`,
+            `${API}/${mov.nombre_movimiento}`,
 
             {
                 method:"POST"
             }
         );
+
+        await esperar(
+            mov.delay_ms
+        );
     }
-    catch(error)
-    {
-        console.log(error);
-    }
+
+    await fetch(
+
+        `${API}/stop`,
+
+        {
+            method:"POST"
+        }
+    );
+}
+
+// ======================================
+// ESPERAR
+// ======================================
+
+function esperar(ms)
+{
+    return new Promise(resolve => {
+
+        setTimeout(
+            resolve,
+            ms
+        );
+
+    });
 }
 
 // ======================================
@@ -244,4 +374,3 @@ async function ejecutarDemo(
 // ======================================
 
 cargarDemos();
-

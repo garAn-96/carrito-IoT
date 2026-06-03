@@ -146,7 +146,6 @@ ws.onopen = () =>
 // ======================================
 // WS MESSAGE
 // ======================================
-
 ws.onmessage = (event) =>
 {
     const data =
@@ -160,10 +159,7 @@ ws.onmessage = (event) =>
     // HEARTBEAT
     // ==================================
 
-    if(
-        data.tipo ==
-        "heartbeat"
-    )
+    if(data.tipo == "heartbeat")
     {
         estadoESP.innerHTML =
         "ONLINE";
@@ -177,10 +173,7 @@ ws.onmessage = (event) =>
     // MOVIMIENTO
     // ==================================
 
-    if(
-        data.tipo ==
-        "movimiento"
-    )
+    if(data.tipo == "movimiento")
     {
         movimientoActual.innerHTML =
         data.movimiento;
@@ -194,30 +187,24 @@ ws.onmessage = (event) =>
         actualizarCarrito(
             data.movimiento
         );
-
-        // ==============================
-        // DEMOS LIVE
-        // ==============================
-
-        if(
-            data.origen ==
-            "demo"
-        )
-        {
-            iluminarDemo(
-                data.movimiento
-            );
-        }
     }
 
     // ==================================
-    // VELOCIDAD
+    // DEMO LIVE
     // ==================================
 
-    if(
-        data.tipo ==
-        "parametro"
-    )
+    if(data.tipo == "demo")
+    {
+        iluminarDemo(
+            data.id_demo
+        );
+    }
+
+    // ==================================
+    // PARAMETRO
+    // ==================================
+
+    if(data.tipo == "parametro")
     {
         velocidadActual.innerHTML =
         data.velocidad;
@@ -227,10 +214,7 @@ ws.onmessage = (event) =>
     // OBSTACULO
     // ==================================
 
-    if(
-        data.tipo ==
-        "obstaculo"
-    )
+    if(data.tipo == "obstaculo")
     {
         radarChart.data.datasets[0]
         .data = [
@@ -244,26 +228,9 @@ ws.onmessage = (event) =>
             data.distancia
         );
 
-        alertaObstaculo.style.display =
-        "block";
-
-        alertaObstaculo.innerHTML = `
-
-        <i class="
-        bi bi-exclamation-triangle-fill
-        "></i>
-
-        Obstáculo Detectado
-        (${data.distancia} cm)
-
-        `;
-
-        setTimeout(() => {
-
-            alertaObstaculo.style.display =
-            "none";
-
-        }, 3000);
+        mostrarAlerta(
+            data.distancia
+        );
     }
 };
 
@@ -404,7 +371,6 @@ function agregarObstaculo(
 // ======================================
 // TELEMETRIA
 // ======================================
-
 function agregarTelemetria(
     ip
 )
@@ -414,6 +380,10 @@ function agregarTelemetria(
         "telemetriaLista"
     );
 
+    const hora =
+    new Date()
+    .toLocaleTimeString();
+
     lista.innerHTML = `
 
     <li class="
@@ -422,14 +392,71 @@ function agregarTelemetria(
 
         <i class="
         bi bi-wifi
+        text-info
         "></i>
 
+        IP:
         ${ip}
+
+    </li>
+
+    <li class="
+    list-group-item
+    ">
+
+        <i class="
+        bi bi-clock
+        text-warning
+        "></i>
+
+        ${hora}
+
+    </li>
+
+    <li class="
+    list-group-item
+    ">
+
+        <i class="
+        bi bi-cpu
+        text-success
+        "></i>
+
+        ESP8266 ONLINE
 
     </li>
 
     `;
 }
+
+
+function mostrarAlerta(
+    distancia
+)
+{
+    alertaObstaculo.style.display =
+    "block";
+
+    alertaObstaculo.innerHTML = `
+
+    <i class="
+    bi bi-exclamation-triangle-fill
+    "></i>
+
+    Obstáculo Detectado
+
+    (${distancia} cm)
+
+    `;
+
+    setTimeout(() => {
+
+        alertaObstaculo.style.display =
+        "none";
+
+    }, 2500);
+}
+
 
 // ======================================
 // LIMITAR LISTA
@@ -530,7 +557,13 @@ async function cargarDemos()
 
             </h5>
 
-            <ul>
+            <ul
+            class="
+            movimientos-demo
+            "
+            style="
+            display:none;
+            ">
 
                 ${htmlMovs}
 
@@ -545,9 +578,8 @@ async function cargarDemos()
 // ======================================
 // DEMO LIVE
 // ======================================
-
 function iluminarDemo(
-    movimiento
+    id_demo
 )
 {
     const demos =
@@ -566,22 +598,34 @@ function iluminarDemo(
         ).style.display =
         "none";
 
-        if(
-            demo.innerHTML.includes(
-                movimiento
-            )
-        )
-        {
-            demo.classList.add(
-                "active"
-            );
-
-            demo.querySelector(
-                ".live-badge"
-            ).style.display =
-            "inline-block";
-        }
+        demo.querySelector(
+            ".movimientos-demo"
+        ).style.display =
+        "none";
     });
+
+    const demoActiva =
+    document.getElementById(
+
+        `demo-${id_demo}`
+    );
+
+    if(demoActiva)
+    {
+        demoActiva.classList.add(
+            "active"
+        );
+
+        demoActiva.querySelector(
+            ".live-badge"
+        ).style.display =
+        "inline-block";
+
+        demoActiva.querySelector(
+            ".movimientos-demo"
+        ).style.display =
+        "block";
+    }
 }
 
 // ======================================
