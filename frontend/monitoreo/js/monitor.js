@@ -11,7 +11,36 @@ new WebSocket(
 );
 
 // ======================================
-// RADAR CHART
+// ELEMENTOS
+// ======================================
+
+const movimientoActual =
+document.getElementById(
+    "movimientoActual"
+);
+
+const velocidadActual =
+document.getElementById(
+    "velocidadActual"
+);
+
+const estadoESP =
+document.getElementById(
+    "estadoESP"
+);
+
+const arrowMovimiento =
+document.getElementById(
+    "arrowMovimiento"
+);
+
+const alertaObstaculo =
+document.getElementById(
+    "alertaObstaculo"
+);
+
+// ======================================
+// RADAR PREMIUM
 // ======================================
 
 const radarCtx =
@@ -31,15 +60,19 @@ new Chart(
         data:{
 
             labels:[
-                "Distancia"
+                "Sensor"
             ],
 
             datasets:[{
 
                 label:
-                "Obstáculo",
+                "Distancia",
 
                 data:[100],
+
+                borderWidth:3,
+
+                pointRadius:6,
 
                 fill:true
             }]
@@ -51,6 +84,10 @@ new Chart(
 
             maintainAspectRatio:false,
 
+            animation:{
+                duration:500
+            },
+
             scales:{
 
                 r:{
@@ -59,20 +96,25 @@ new Chart(
 
                     suggestedMax:100,
 
-                    ticks:{
-                        backdropColor:
-                        "transparent",
+                    angleLines:{
+                        color:
+                        "rgba(255,255,255,.1)"
+                    },
 
-                        color:"white"
+                    grid:{
+                        color:
+                        "rgba(255,255,255,.1)"
                     },
 
                     pointLabels:{
                         color:"white"
                     },
 
-                    grid:{
-                        color:
-                        "rgba(255,255,255,.2)"
+                    ticks:{
+                        color:"white",
+
+                        backdropColor:
+                        "transparent"
                     }
                 }
             },
@@ -97,7 +139,7 @@ new Chart(
 ws.onopen = () =>
 {
     console.log(
-        "WS MONITOR OK"
+        "MONITOR WS OK"
     );
 };
 
@@ -123,9 +165,7 @@ ws.onmessage = (event) =>
         "heartbeat"
     )
     {
-        document.getElementById(
-            "estadoESP"
-        ).innerHTML =
+        estadoESP.innerHTML =
         "ONLINE";
 
         agregarTelemetria(
@@ -142,15 +182,45 @@ ws.onmessage = (event) =>
         "movimiento"
     )
     {
-        document.getElementById(
-            "movimientoActual"
-        ).innerHTML =
+        movimientoActual.innerHTML =
         data.movimiento;
 
         agregarMovimiento(
+
             data.movimiento,
             data.origen
         );
+
+        actualizarCarrito(
+            data.movimiento
+        );
+
+        // ==============================
+        // DEMOS LIVE
+        // ==============================
+
+        if(
+            data.origen ==
+            "demo"
+        )
+        {
+            iluminarDemo(
+                data.movimiento
+            );
+        }
+    }
+
+    // ==================================
+    // VELOCIDAD
+    // ==================================
+
+    if(
+        data.tipo ==
+        "parametro"
+    )
+    {
+        velocidadActual.innerHTML =
+        data.velocidad;
     }
 
     // ==================================
@@ -169,8 +239,167 @@ ws.onmessage = (event) =>
         ];
 
         radarChart.update();
+
+        agregarObstaculo(
+            data.distancia
+        );
+
+        alertaObstaculo.style.display =
+        "block";
+
+        alertaObstaculo.innerHTML = `
+
+        <i class="
+        bi bi-exclamation-triangle-fill
+        "></i>
+
+        Obstáculo Detectado
+        (${data.distancia} cm)
+
+        `;
+
+        setTimeout(() => {
+
+            alertaObstaculo.style.display =
+            "none";
+
+        }, 3000);
     }
 };
+
+// ======================================
+// CARRITO VISUAL
+// ======================================
+
+function actualizarCarrito(
+    movimiento
+)
+{
+    let flecha = "⬆";
+
+    if(
+        movimiento == "atras"
+    )
+    {
+        flecha = "⬇";
+    }
+
+    else if(
+        movimiento == "izquierda"
+    )
+    {
+        flecha = "⬅";
+    }
+
+    else if(
+        movimiento == "derecha"
+    )
+    {
+        flecha = "➡";
+    }
+
+    else if(
+        movimiento == "stop"
+    )
+    {
+        flecha = "⏹";
+    }
+
+    arrowMovimiento.innerHTML =
+    flecha;
+}
+
+// ======================================
+// MOVIMIENTOS
+// ======================================
+
+function agregarMovimiento(
+
+    movimiento,
+    origen
+
+)
+{
+    const lista =
+    document.getElementById(
+        "historialMovimientos"
+    );
+
+    lista.innerHTML = `
+
+    <li class="
+    list-group-item
+    ">
+
+        <i class="
+        bi bi-arrow-repeat
+        "></i>
+
+        <strong>
+
+        ${movimiento}
+
+        </strong>
+
+        <br>
+
+        <small>
+
+        ${origen}
+
+        </small>
+
+    </li>
+
+    ` + lista.innerHTML;
+
+    limitarLista(
+        lista,
+        10
+    );
+}
+
+// ======================================
+// OBSTACULOS
+// ======================================
+
+function agregarObstaculo(
+    distancia
+)
+{
+    const lista =
+    document.getElementById(
+        "listaObstaculos"
+    );
+
+    lista.innerHTML = `
+
+    <li class="
+    list-group-item
+    ">
+
+        <i class="
+        bi bi-exclamation-triangle-fill
+        text-danger
+        "></i>
+
+        Obstáculo a
+
+        <strong>
+
+        ${distancia} cm
+
+        </strong>
+
+    </li>
+
+    ` + lista.innerHTML;
+
+    limitarLista(
+        lista,
+        10
+    );
+}
 
 // ======================================
 // TELEMETRIA
@@ -203,140 +432,26 @@ function agregarTelemetria(
 }
 
 // ======================================
-// MOVIMIENTO
+// LIMITAR LISTA
 // ======================================
 
-function agregarMovimiento(
-
-    movimiento,
-    origen
-
+function limitarLista(
+    lista,
+    max
 )
 {
-    const lista =
-    document.getElementById(
-        "historialMovimientos"
-    );
-
-    lista.innerHTML = `
-
-    <li class="
-    list-group-item
-    ">
-
-        <strong>
-        ${movimiento}
-        </strong>
-
-        <br>
-
-        <small>
-        ${origen}
-        </small>
-
-    </li>
-
-    ` + lista.innerHTML;
+    while(
+        lista.children.length > max
+    )
+    {
+        lista.removeChild(
+            lista.lastChild
+        );
+    }
 }
 
 // ======================================
-// CARGAR HISTORIAL
-// ======================================
-
-async function cargarHistorial()
-{
-    const response =
-    await fetch(
-
-        `${API}/api/historial`
-    );
-
-    const data =
-    await response.json();
-
-    const lista =
-    document.getElementById(
-        "historialMovimientos"
-    );
-
-    lista.innerHTML =
-    "";
-
-    data.forEach(item => {
-
-        lista.innerHTML += `
-
-        <li class="
-        list-group-item
-        ">
-
-            <strong>
-
-            ${item.nombre_movimiento}
-
-            </strong>
-
-            <br>
-
-            <small>
-
-            ${item.origen}
-
-            </small>
-
-        </li>
-
-        `;
-    });
-}
-
-// ======================================
-// CARGAR TELEMETRIA
-// ======================================
-
-async function cargarTelemetria()
-{
-    const response =
-    await fetch(
-
-        `${API}/api/telemetria`
-    );
-
-    const data =
-    await response.json();
-
-    const lista =
-    document.getElementById(
-        "telemetriaLista"
-    );
-
-    lista.innerHTML = `
-
-    <li class="
-    list-group-item
-    ">
-
-        <i class="
-        bi bi-cpu
-        "></i>
-
-        ${data.ip}
-
-        <br>
-
-        <small>
-
-        ${data.estado}
-
-        </small>
-
-    </li>
-
-    `;
-}
-
-// ======================================
-// CARGAR DEMOS
+// DEMOS
 // ======================================
 
 async function cargarDemos()
@@ -387,13 +502,31 @@ async function cargarDemos()
 
         contenedor.innerHTML += `
 
-        <div class="
+        <div
+
+        id="
+        demo-${demo.id_demo}
+        "
+
+        class="
         demo-card
         ">
 
             <h5>
 
                 ${demo.nombre_demo}
+
+                <span
+                class="
+                live-badge
+                "
+                style="
+                display:none;
+                ">
+
+                    LIVE
+
+                </span>
 
             </h5>
 
@@ -410,11 +543,106 @@ async function cargarDemos()
 }
 
 // ======================================
+// DEMO LIVE
+// ======================================
+
+function iluminarDemo(
+    movimiento
+)
+{
+    const demos =
+    document.querySelectorAll(
+        ".demo-card"
+    );
+
+    demos.forEach(demo => {
+
+        demo.classList.remove(
+            "active"
+        );
+
+        demo.querySelector(
+            ".live-badge"
+        ).style.display =
+        "none";
+
+        if(
+            demo.innerHTML.includes(
+                movimiento
+            )
+        )
+        {
+            demo.classList.add(
+                "active"
+            );
+
+            demo.querySelector(
+                ".live-badge"
+            ).style.display =
+            "inline-block";
+        }
+    });
+}
+
+// ======================================
+// CARGAR HISTORIAL
+// ======================================
+
+async function cargarHistorial()
+{
+    const response =
+    await fetch(
+
+        `${API}/api/historial`
+    );
+
+    const data =
+    await response.json();
+
+    data.reverse();
+
+    data.forEach(item => {
+
+        agregarMovimiento(
+
+            item.nombre_movimiento,
+
+            item.origen
+        );
+    });
+}
+
+// ======================================
+// CARGAR OBSTACULOS
+// ======================================
+
+async function cargarObstaculos()
+{
+    const response =
+    await fetch(
+
+        `${API}/api/obstaculos`
+    );
+
+    const data =
+    await response.json();
+
+    data.reverse();
+
+    data.forEach(item => {
+
+        agregarObstaculo(
+            item.distancia_cm
+        );
+    });
+}
+
+// ======================================
 // INIT
 // ======================================
 
 cargarHistorial();
 
-cargarTelemetria();
+cargarObstaculos();
 
 cargarDemos();

@@ -10,7 +10,7 @@ name="viewport"
 content="width=device-width, initial-scale=1.0">
 
 <title>
-Monitoreo IoT
+Dashboard IoT Premium
 </title>
 
 <link
@@ -44,24 +44,60 @@ rel="stylesheet">
     <div class="glass-card text-center">
 
         <h1>
-            Dashboard Monitoreo IoT
+            Dashboard IoT Inteligente
         </h1>
 
-        <div class="estado">
+        <div class="row">
 
-            ESP:
-            <span id="estadoESP">
-                ONLINE
-            </span>
+            <div class="col-md-4">
 
-        </div>
+                <div class="estado">
 
-        <div class="estado">
+                    ESP:
 
-            Movimiento:
-            <span id="movimientoActual">
-                stop
-            </span>
+                    <span
+                    id="estadoESP"
+                    class="online">
+
+                        ONLINE
+
+                    </span>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-4">
+
+                <div class="estado">
+
+                    Movimiento:
+
+                    <span id="movimientoActual">
+
+                        stop
+
+                    </span>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-4">
+
+                <div class="estado">
+
+                    Velocidad:
+
+                    <span id="velocidadActual">
+
+                        700
+
+                    </span>
+
+                </div>
+
+            </div>
 
         </div>
 
@@ -85,28 +121,40 @@ rel="stylesheet">
                     Radar Obstáculos
                 </h4>
 
-                <canvas id="radarChart">
+                <div
+                id="alertaObstaculo"
+                class="alerta-obstaculo mb-2">
 
-                </canvas>
+                    <i class="
+                    bi bi-exclamation-triangle-fill
+                    "></i>
+
+                    Obstáculo Detectado
+
+                </div>
+
+                <div class="radar-container">
+
+                    <canvas id="radarChart">
+
+                    </canvas>
+
+                </div>
 
             </div>
 
-        </div>
-
-        <!-- ============================== -->
-        <!-- TELEMETRIA -->
-        <!-- ============================== -->
-
-        <div class="col-md-4">
+            <!-- ========================== -->
+            <!-- OBSTACULOS -->
+            <!-- ========================== -->
 
             <div class="glass-card">
 
                 <h4>
-                    Telemetría
+                    Últimos Obstáculos
                 </h4>
 
                 <ul
-                id="telemetriaLista"
+                id="listaObstaculos"
                 class="
                 list-group
                 lista-scroll
@@ -115,6 +163,44 @@ rel="stylesheet">
                 </ul>
 
             </div>
+
+        </div>
+
+        <!-- ============================== -->
+        <!-- CARRITO -->
+        <!-- ============================== -->
+
+        <div class="col-md-4">
+
+            <div class="glass-card">
+
+                <h4>
+                    Estado del Carrito
+                </h4>
+
+                <div class="carro-visual">
+
+                    <div
+                    id="carro"
+                    class="carro">
+
+                    </div>
+
+                    <div
+                    id="arrowMovimiento"
+                    class="mov-arrow">
+
+                        ⬆
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- ========================== -->
+            <!-- MOVIMIENTOS -->
+            <!-- ========================== -->
 
             <div class="glass-card">
 
@@ -144,13 +230,34 @@ rel="stylesheet">
             <div class="glass-card">
 
                 <h4>
-                    Demos y Movimientos
+                    Demos Inteligentes
                 </h4>
 
                 <div
                 id="listaDemos">
 
                 </div>
+
+            </div>
+
+            <!-- ========================== -->
+            <!-- TELEMETRIA -->
+            <!-- ========================== -->
+
+            <div class="glass-card">
+
+                <h4>
+                    Telemetría
+                </h4>
+
+                <ul
+                id="telemetriaLista"
+                class="
+                list-group
+                lista-scroll
+                ">
+
+                </ul>
 
             </div>
 
@@ -166,7 +273,7 @@ rel="stylesheet">
 
         <p>
             Sistema IoT para Control y
-            Monitoreo de Carrito Inteligente
+            Monitoreo Inteligente de Carrito
         </p>
 
         <p>
@@ -175,7 +282,7 @@ rel="stylesheet">
         </p>
 
         <p>
-            Tecnológico Nacional de México - Campus Pachuca
+            Tecnológico Nacional de México
         </p>
 
     </footer>
